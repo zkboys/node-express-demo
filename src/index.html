@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>express</title>
+    <link rel="stylesheet" href="css/style.css" media="screen" title="no title" charset="utf-8">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        $('#test-ajax').click(function(){
+          var name = $('input[name=name]').val();
+          var age = $('input[name=age]').val();
+          $.ajax({
+            url:'/test-ajax',
+            data:{'name':name, 'age':age},
+            success: function(data){
+              $('.user-data tbody').html('');
+              for(var i = 0;i<data.length;i++){
+                var user = data[i];
+                $('.user-data tbody').append('<tr><td>'+user.name+'</td><td>'+user.age+'</td></tr>')
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <label for="name">姓名</label>
+    <input type="text" name="name" value="">
+    <label for="age">年龄</label>
+    <input type="text" name="age" value="">
+    <button id='test-ajax' type="button" name="button">
+      查询
+    </button>
+    <table class='user-data'>
+      <thead>
+        <tr>
+          <th>
+            姓名
+          </th>
+          <th>
+            年龄
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </body>
+</html>

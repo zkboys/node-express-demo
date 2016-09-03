@@ -7,6 +7,11 @@ body {
     padding: 0;
     background: #FBF7EB;
     overflow: hidden;
+    font-size: 0.6rem;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 .main-container {
@@ -30,6 +35,7 @@ body {
     line-height: 30px;
     color: #000;
     font-size: 0.8rem;
+    margin-right: 0.5rem;
 }
 
 .query .company {
@@ -37,10 +43,27 @@ body {
     width: 8rem;
     margin-right: 10px;
     border-radius: 0;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    background: #fff;
+}
+
+.query .company option {
+    width: 8rem;
 }
 
 .query .search-btn {
+    display: inline-block;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    padding: 0 10px;
     background-color: #FD6702;
+    border-radius: 1.5rem;
+    color: #fff;
+}
+
+.query .search-btn:active {
+    background-color: #d35802;
 }
 
 .year-month {
@@ -50,6 +73,7 @@ body {
     height: 3rem;
     line-height: 3rem;
     border-bottom: 1px solid #F1E2D0;
+    color: #C3601F;
 }
 
 .year-month .year-month-prev,
@@ -101,7 +125,7 @@ body {
     width: 1rem;
 }
 
-.week-day .right .date-next {
+.week-day .right .day-next {
     position: absolute;
     left: 0;
     top: 2.2rem;
@@ -121,7 +145,7 @@ body {
     border-bottom: 1px solid #F1E2D0;;
 }
 
-.week-day .left .top-blank .date-prev {
+.week-day .left .top-blank .day-prev {
     position: absolute;
     right: 0;
     top: 2.2rem;
@@ -134,8 +158,8 @@ body {
     background: #FFEDBF;
 }
 
-.week-day .center .date-back,
-.week-day .center .date-front,
+.week-day .center .day-back,
+.week-day .center .day-front,
 .week-day .center .week {
     height: 2rem;
     line-height: 2rem;
@@ -146,8 +170,8 @@ body {
     border-bottom: 1px solid #F1E2D0;
 }
 
-.week-day .center .date-back li,
-.week-day .center .date-front li,
+.week-day .center .day-back li,
+.week-day .center .day-front li,
 .week-day .center .week li {
     float: left;
     width: 14.285714285714286%;
@@ -155,11 +179,14 @@ body {
     border-right: 1px solid #F1E2D0;
 }
 
-.week-day .center .date-front-wrap {
+.week-day .center .week {
+    color: #C3601F;
+}
+
+.week-day .center .day-front-wrap {
     font-size: 0;
     padding: 0;
     margin: 0;
-    box-sizing: border-box;
     position: absolute;
     width: 500%;
     top: 2.2rem;
@@ -168,16 +195,16 @@ body {
     border: 0;
 }
 
-.week-day .center .date-front-wrap.no-touch {
+.week-day .center .day-front-wrap.no-touch {
     transition: transform 300ms;
 }
 
-.week-day .center .date-front {
+.week-day .center .day-front {
     display: inline-block;
     width: 20%;
     height: 1.6rem;
     line-height: 1.6rem;
-    font-size: 12px;
+    font-size: 0.6rem;
 }
 
 .content {
@@ -224,14 +251,13 @@ body {
     text-align: center;
     border-right: 1px solid #F1E2D0;
     border-bottom: 1px solid #F1E2D0;
-    box-sizing: border-box;
-    padding: 0.2rem 0;
+    padding: 0.3rem 0;
 }
 
 .content .center .data > li ul > li .item {
     color: #fff;
     text-align: center;
-    line-height: 1.2rem;
+    line-height: 1rem;
     font-size: 0.1rem;
 }
 
@@ -245,4 +271,12 @@ body {
 
 .yellow {
     background-color: #EE863E;
+}
+
+.content .loading {
+    margin-left: -1.5rem;
+    width: 100%;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
 }

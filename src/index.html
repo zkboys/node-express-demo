@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>Swiper demo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
     <!-- Link Swiper's CSS -->
     <link rel="stylesheet" href="./css/swiper.min.css">
     <link rel="stylesheet" href="./css/style.css">
@@ -13,14 +12,14 @@
 <div class="main-container">
     <div class="query">
         <div class="label">公司</div>
-        <select class="form-control company">
+        <select class="company">
             <option>1</option>
             <option>2</option>
             <option>3</option>
             <option>4</option>
             <option>5</option>
         </select>
-        <div type="button" class="btn btn-warning search-btn ">查询</div>
+        <div type="button" class="search-btn ">查询</div>
     </div>
     <div class="year-month">
         <div class="year-month-prev">&lt;</div>
@@ -30,7 +29,7 @@
     <div class="week-day">
         <div class="left">
             <div class="top-blank">
-                <div class="date-prev">&lt;</div>
+                <div class="day-prev">&lt;</div>
             </div>
         </div>
         <div class="center">
@@ -44,7 +43,7 @@
                 <li>六</li>
             </ul>
             <div class="day">
-                <ul class="date-back">
+                <ul class="day-back">
                     <li>&nbsp;</li>
                     <li>&nbsp;</li>
                     <li>&nbsp;</li>
@@ -53,8 +52,8 @@
                     <li>&nbsp;</li>
                     <li>&nbsp;</li>
                 </ul>
-                <div class="date-front-wrap">
-                    <ul class="date-front" data-swiper-slide-index="2">
+                <div class="day-front-wrap">
+                    <ul class="day-front" data-swiper-slide-index="2">
                         <li>03</li>
                         <li>03</li>
                         <li>03</li>
@@ -64,7 +63,7 @@
                         <li>03</li>
                         <li>01</li>
                     </ul>
-                    <ul class="date-front" data-swiper-slide-index="0">
+                    <ul class="day-front" data-swiper-slide-index="0">
                         <li>01</li>
                         <li>01</li>
                         <li>01</li>
@@ -73,7 +72,7 @@
                         <li>01</li>
                         <li>01</li>
                     </ul>
-                    <ul class="date-front" data-swiper-slide-index="1">
+                    <ul class="day-front" data-swiper-slide-index="1">
                         <li>02</li>
                         <li>02</li>
                         <li>02</li>
@@ -82,7 +81,7 @@
                         <li>02</li>
                         <li>02</li>
                     </ul>
-                    <ul class="date-front" data-swiper-slide-index="2">
+                    <ul class="day-front" data-swiper-slide-index="2">
                         <li>03</li>
                         <li>03</li>
                         <li>03</li>
@@ -91,7 +90,7 @@
                         <li>03</li>
                         <li>03</li>
                     </ul>
-                    <ul class="date-front" data-swiper-slide-index="0">
+                    <ul class="day-front" data-swiper-slide-index="0">
                         <li>01</li>
                         <li>01</li>
                         <li>01</li>
@@ -104,7 +103,7 @@
             </div>
         </div>
         <div class="right">
-            <div class="date-next">&gt;</div>
+            <div class="day-next">&gt;</div>
         </div>
     </div>
 
@@ -403,6 +402,7 @@
                                 </ul>
                             </li>
                         </ul>
+                        <div class="loading">没有更多了</div>
                     </div>
                 </div>
             </div>
@@ -438,9 +438,10 @@
     var mySwiper = new Swiper('.swiper-container', {
         loop: true,
         autoHeight: true,
-        nextButton: '.date-next',
-        prevButton: '.date-prev',
+        nextButton: '.day-next',
+        prevButton: '.day-prev',
         onSlideChangeEnd: function (swiper) {
+            dayFrontWrapTransform(swiper, false);
         },
         onSlideNextStart: function (swiper) {
             console.log('nextStart');
@@ -451,11 +452,6 @@
             }
             timeout = setTimeout(function () {
                 console.log('nextEnd', swiper.translate);
-                var dateFront = $('.date-front-wrap');
-                dateFront.css({
-                    transform: 'translate3d(' + (swiper.translate) + 'px, 0, 0)'
-                });
-
             }, 100);
         },
         onSlidePrevStart: function (swiper) {
@@ -470,25 +466,29 @@
             }, 100);
         },
         onSliderMove: function (swiper, event) {
-            var dateFront = $('.date-front-wrap');
-            dateFront.css({
-                transform: 'translate3d(' + ( swiper.translate ) + 'px, 0, 0)'
-            });
-        },
-        onTouchStart: function () {
-            $('.date-front-wrap').removeClass('no-touch')
+            dayFrontWrapTransform(swiper, false);
         },
         onTouchEnd: function (swiper) {
             setTimeout(function () {
                 console.log(swiper.translate);
-                var dateFront = $('.date-front-wrap');
-                dateFront.addClass('no-touch').css({
-                    transform: 'translate3d(' + (swiper.translate) + 'px, 0, 0)'
-                });
+                dayFrontWrapTransform(swiper, true);
             }, 0);
         },
-
     });
+    $('.day-next, .day-prev').click(function () {
+        dayFrontWrapTransform(mySwiper, true);
+    });
+    function dayFrontWrapTransform(swiper, addNoTouchClass) {
+        var $dayFrontWrap = $('.day-front-wrap');
+        if (addNoTouchClass) {
+            $dayFrontWrap.addClass('no-touch');
+        } else {
+            $dayFrontWrap.removeClass('no-touch');
+        }
+        $dayFrontWrap.css({
+            transform: 'translate3d(' + swiper.translate + 'px, 0, 0)'
+        });
+    }
 </script>
 </body>
 </html>

@@ -1,51 +1,495 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
-    <title>express</title>
-    <link rel="stylesheet" href="css/style.css" media="screen" title="no title" charset="utf-8">
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript">
-      $(function(){
-        $('#test-ajax').click(function(){
-          var name = $('input[name=name]').val();
-          var age = $('input[name=age]').val();
-          $.ajax({
-            url:'/test-ajax',
-            data:{'name':name, 'age':age},
-            success: function(data){
-              $('.user-data tbody').html('');
-              for(var i = 0;i<data.length;i++){
-                var user = data[i];
-                $('.user-data tbody').append('<tr><td>'+user.name+'</td><td>'+user.age+'</td></tr>')
-              }
-            }
-          });
+    <title>Swiper demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="./css/swiper.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+<div class="main-container">
+    <div class="query">
+        <div class="label">公司</div>
+        <select class="form-control company">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+        <div type="button" class="btn btn-warning search-btn ">查询</div>
+    </div>
+    <div class="year-month">
+        <div class="year-month-prev">&lt;</div>
+        <span>2016年2月</span>
+        <div class="year-month-next">&gt;</div>
+    </div>
+    <div class="week-day">
+        <div class="left">
+            <div class="top-blank">
+                <div class="date-prev">&lt;</div>
+            </div>
+        </div>
+        <div class="center">
+            <ul class="week">
+                <li>日</li>
+                <li>一</li>
+                <li>二</li>
+                <li>三</li>
+                <li>四</li>
+                <li>五</li>
+                <li>六</li>
+            </ul>
+            <div class="day">
+                <ul class="date-back">
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                    <li>&nbsp;</li>
+                </ul>
+                <div class="date-front-wrap">
+                    <ul class="date-front" data-swiper-slide-index="2">
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>01</li>
+                    </ul>
+                    <ul class="date-front" data-swiper-slide-index="0">
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                    </ul>
+                    <ul class="date-front" data-swiper-slide-index="1">
+                        <li>02</li>
+                        <li>02</li>
+                        <li>02</li>
+                        <li>02</li>
+                        <li>02</li>
+                        <li>02</li>
+                        <li>02</li>
+                    </ul>
+                    <ul class="date-front" data-swiper-slide-index="2">
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                        <li>03</li>
+                    </ul>
+                    <ul class="date-front" data-swiper-slide-index="0">
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                        <li>01</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="date-next">&gt;</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="left">
+            <ul class="name">
+                <li>张三炮</li>
+                <li>李四</li>
+                <li>王五</li>
+            </ul>
+        </div>
+        <div class="center">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <ul class="data">
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>111</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="swiper-slide">
+                        <ul class="data">
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>222</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="swiper-slide">
+                        <ul class="data">
+                            <li>
+                                <ul>
+                                    <li>
+                                        <div class="item red">出差</div>
+                                    </li>
+                                    <li>333</li>
+                                    <li>
+                                        <div class="item green">事假</div>
+                                    </li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>
+                                        <div class="item yellow">年假</div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                    <li>&nbsp;</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="./js/swiper.min.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#test-ajax').click(function () {
+            var name = $('input[name=name]').val();
+            var age = $('input[name=age]').val();
+            $.ajax({
+                url: '/test-ajax',
+                data: {'name': name, 'age': age},
+                success: function (data) {
+                    $('.user-data tbody').html('');
+                    for (var i = 0; i < data.length; i++) {
+                        var user = data[i];
+                        $('.user-data tbody').append('<tr><td>' + user.name + '</td><td>' + user.age + '</td></tr>')
+                    }
+                }
+            });
         });
-      });
-    </script>
-  </head>
-  <body>
-    <label for="name">姓名</label>
-    <input type="text" name="name" value="">
-    <label for="age">年龄</label>
-    <input type="text" name="age" value="">
-    <button id='test-ajax' type="button" name="button">
-      查询
-    </button>
-    <table class='user-data'>
-      <thead>
-        <tr>
-          <th>
-            姓名
-          </th>
-          <th>
-            年龄
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </body>
+    });
+</script>
+<!-- Initialize Swiper -->
+<script>
+    var timeout = 0;
+    var mySwiper = new Swiper('.swiper-container', {
+        loop: true,
+        autoHeight: true,
+        nextButton: '.date-next',
+        prevButton: '.date-prev',
+        onSlideChangeEnd: function (swiper) {
+        },
+        onSlideNextStart: function (swiper) {
+            console.log('nextStart');
+        },
+        onSlideNextEnd: function (swiper) {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function () {
+                console.log('nextEnd', swiper.translate);
+                var dateFront = $('.date-front-wrap');
+                dateFront.css({
+                    transform: 'translate3d(' + (swiper.translate) + 'px, 0, 0)'
+                });
+
+            }, 100);
+        },
+        onSlidePrevStart: function (swiper) {
+            console.log('prevStart');
+        },
+        onSlidePrevEnd: function (swiper) {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function () {
+                console.log('prevEnd');
+            }, 100);
+        },
+        onSliderMove: function (swiper, event) {
+            var dateFront = $('.date-front-wrap');
+            dateFront.css({
+                transform: 'translate3d(' + ( swiper.translate ) + 'px, 0, 0)'
+            });
+        },
+        onTouchStart: function () {
+            $('.date-front-wrap').removeClass('no-touch')
+        },
+        onTouchEnd: function (swiper) {
+            setTimeout(function () {
+                console.log(swiper.translate);
+                var dateFront = $('.date-front-wrap');
+                dateFront.addClass('no-touch').css({
+                    transform: 'translate3d(' + (swiper.translate) + 'px, 0, 0)'
+                });
+            }, 0);
+        },
+
+    });
+</script>
+</body>
 </html>
+

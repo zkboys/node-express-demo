@@ -1,7 +1,248 @@
-body{
-  
+html {
+    font-size: 20px;
 }
-.user-data{
-  width:500px;
-  background:green;
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #FBF7EB;
+    overflow: hidden;
+}
+
+.main-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.query {
+    height: 4rem;
+    padding: 1.15rem 0.5rem 0 0.5rem;
+    background: #fff;
+
+}
+
+.query .label {
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    color: #000;
+    font-size: 0.8rem;
+}
+
+.query .company {
+    float: left;
+    width: 8rem;
+    margin-right: 10px;
+    border-radius: 0;
+}
+
+.query .search-btn {
+    background-color: #FD6702;
+}
+
+.year-month {
+    background: #FBF7EB;
+    text-align: center;
+    font-size: 0.8rem;
+    height: 3rem;
+    line-height: 3rem;
+    border-bottom: 1px solid #F1E2D0;
+}
+
+.year-month .year-month-prev,
+.year-month .year-month-next {
+    color: #BCB9B0;
+    height: 100%;
+    width: 50px;
+}
+
+.year-month .year-month-prev {
+    float: left;
+}
+
+.year-month .year-month-next {
+    float: right;
+}
+
+.week-day .left,
+.week-day .center,
+.week-day .right,
+.content .left,
+.content .center,
+.content .right {
+    position: absolute;
+    top: 0;
+}
+
+.week-day {
+    position: relative;
+}
+
+.week-day .left,
+.content .left {
+    left: 0;
+    width: 4rem;
+    border-right: 1px solid #F1E2D0;
+}
+
+.week-day .center,
+.content .center {
+    left: 4rem;
+    right: 1rem;
+    overflow: hidden;
+}
+
+.week-day .right,
+.content .right {
+    right: 0;
+    width: 1rem;
+}
+
+.week-day .right .date-next {
+    position: absolute;
+    left: 0;
+    top: 2.2rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
+    width: 1rem;
+    text-align: center;
+    border-bottom-right-radius: 50%;
+    border-top-right-radius: 50%;
+    background: #FFEDBF;
+}
+
+.week-day .left .top-blank {
+    position: relative;
+    width: 100%;
+    height: 4rem;
+    border-bottom: 1px solid #F1E2D0;;
+}
+
+.week-day .left .top-blank .date-prev {
+    position: absolute;
+    right: 0;
+    top: 2.2rem;
+    height: 1.6rem;
+    line-height: 1.6rem;
+    width: 1rem;
+    text-align: center;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    background: #FFEDBF;
+}
+
+.week-day .center .date-back,
+.week-day .center .date-front,
+.week-day .center .week {
+    height: 2rem;
+    line-height: 2rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    border-bottom: 1px solid #F1E2D0;
+}
+
+.week-day .center .date-back li,
+.week-day .center .date-front li,
+.week-day .center .week li {
+    float: left;
+    width: 14.285714285714286%;
+    text-align: center;
+    border-right: 1px solid #F1E2D0;
+}
+
+.week-day .center .date-front-wrap {
+    font-size: 0;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    position: absolute;
+    width: 500%;
+    top: 2.2rem;
+    height: 1.6rem;
+    background: #FFEDBF;
+    border: 0;
+}
+
+.week-day .center .date-front-wrap.no-touch {
+    transition: transform 300ms;
+}
+
+.week-day .center .date-front {
+    display: inline-block;
+    width: 20%;
+    height: 1.6rem;
+    line-height: 1.6rem;
+    font-size: 12px;
+}
+
+.content {
+    position: absolute;
+    top: 11rem;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: scroll;
+}
+
+.content .left .name {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.content .left .name li {
+    height: 1.6rem;
+    line-height: 1.6rem;
+    border-bottom: 1px solid #F1E2D0;
+    text-align: center;
+}
+
+.content .center .prev {
+    position: relative;
+}
+
+.content .center .data,
+.content .center .data > li ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.content .center .data > li {
+    overflow: hidden;
+}
+
+.content .center .data > li ul > li {
+    float: left;
+    height: 1.6rem;
+    width: 14.285714285714286%;
+    text-align: center;
+    border-right: 1px solid #F1E2D0;
+    border-bottom: 1px solid #F1E2D0;
+    box-sizing: border-box;
+    padding: 0.2rem 0;
+}
+
+.content .center .data > li ul > li .item {
+    color: #fff;
+    text-align: center;
+    line-height: 1.2rem;
+    font-size: 0.1rem;
+}
+
+.red {
+    background-color: #E85A44;;
+}
+
+.green {
+    background-color: #50B6A9;
+}
+
+.yellow {
+    background-color: #EE863E;
 }

@@ -91,26 +91,6 @@
 <!-- Swiper JS -->
 <script src="./js/swiper.min.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript">
-    $(function () {
-        $('#test-ajax').click(function () {
-            var name = $('input[name=name]').val();
-            var age = $('input[name=age]').val();
-            $.ajax({
-                url: '/test-ajax',
-                data: {'name': name, 'age': age},
-                success: function (data) {
-                    $('.user-data tbody').html('');
-                    for (var i = 0; i < data.length; i++) {
-                        var user = data[i];
-                        $('.user-data tbody').append('<tr><td>' + user.name + '</td><td>' + user.age + '</td></tr>')
-                    }
-                }
-            });
-        });
-    });
-</script>
-<!-- Initialize Swiper -->
 <script>
 
     // 对Date的扩展，将 Date 转化为指定格式的String
@@ -135,7 +115,7 @@
         return fmt;
     }
 
-    initDateFontHtml()
+    initDateFontHtml();
 
     var timeout = 0;
     var inited = false;
@@ -146,22 +126,17 @@
         prevButton: '.day-prev',
         onInit: function (swiper) {
             setDayFrontStatus();
-            renderDayFront(true);
+            // TODO 初始化时间 默认上一个月
+            var now = new Date();
+            var initData = new Date(now.getFullYear(), now.getMonth() - 1);
+            renderDayFront(initData);
             inited = true;
-        },
-        onSliderMove: function (swiper, event) {
-            dayFrontWrapTransform(swiper, false);
-        },
-        onTouchEnd: function (swiper) {
-            setTimeout(function () {
-                dayFrontWrapTransform(swiper, true);
-            }, 0);
         },
         onSlideChangeStart: function (swiper) {
             if (inited) {
+                $('.content').scrollTop(0); // 每次翻页都滚动到顶部
                 setDayFrontStatus();
                 renderDayFront();
-                $('.content').scrollTop(0); // 每次翻页都滚动到顶部
                 renderData(true);
             }
         },
@@ -173,7 +148,14 @@
             timeout = setTimeout(function () {
                 renderData();
             }, 10);
-
+        },
+        onSliderMove: function (swiper, event) {
+            dayFrontWrapTransform(swiper, false);
+        },
+        onTouchEnd: function (swiper) {
+            setTimeout(function () {
+                dayFrontWrapTransform(swiper, true);
+            }, 0);
         },
     });
 
@@ -193,6 +175,29 @@
         if (nScrollTop + nDivHight + threshold >= nScrollHight) {
             renderDataByNextCursor();
         }
+    });
+
+    $('.year-month-prev, .year-month-next').click(function () {
+        var currentYearMonthStr = $('.year-month .title').html();
+        var year = currentYearMonthStr.split('年')[0];
+        var month = currentYearMonthStr.split('年')[1].split('月')[0];
+        var currentYearMonth = new Date(year, month - 1);
+        var prevYearMonth = new Date(currentYearMonth.getFullYear(), currentYearMonth.getMonth() - 1, 1);
+        var nextYearMonth = new Date(currentYearMonth.getFullYear(), currentYearMonth.getMonth() + 1, 1);
+
+        if ($(this).hasClass('year-month-next')) {
+            $('.content').scrollTop(0); // 每次翻页都滚动到顶部
+            renderDayFront(nextYearMonth);
+            renderData();
+
+        } else {
+            $('.content').scrollTop(0); // 每次翻页都滚动到顶部
+            renderDayFront(prevYearMonth);
+            renderData();
+        }
+    });
+    $('.query .search-btn').click(function () {
+        renderData();
     });
 
     function renderDataByNextCursor() {
@@ -240,7 +245,11 @@
             renderDataHml(getAllDataFromCache(params), params);
             mySwiper.update();
         } else {
+            var timeout = setTimeout(function () { // 先显示数据加载中。。。
+                renderActiveData({}, params);
+            }, 10);
             getAllData(params, function (data) {
+                clearTimeout(timeout); // 数据加载中未显示出来，就清除掉
                 renderDataHml(data, params);
                 mySwiper.update();
             });
@@ -420,7 +429,7 @@
                 nextCursor: 1, // 滚动加载，是否有下一页的标记, 0 表示没有下一页了。
                 result: [
                     {
-                        name: '张三',
+                        name: '张三' + params.company,
                         data: [0, 1, 2, 3, 0, 0, 1]
                     },
                     {
@@ -667,7 +676,12 @@
 
         });
     }
-    function renderYearMonth() {
+    function renderYearMonth(initData) {
+        if (initData) {
+            var dateStr = initData.Format('yyyy年MM月');
+            $('.year-month span.title').html(dateStr);
+            return;
+        }
         var result1 = {
             count: 0,
         };
@@ -703,7 +717,8 @@
     }
 
     function renderDayFront(init) {
-        var intiDate = new Date('2016-2-3');
+        var intiDate = init;
+        var initYearMonth = init;
         var $active = $('.day-front-wrap .swiper-slide-active');
         if (!init) {
             intiDate = $active.find('li').data('date');
@@ -756,7 +771,7 @@
                 $li.html(date.Format('dd'));
             });
         });
-        renderYearMonth();
+        renderYearMonth(initYearMonth);
 
         // 处理样式
         var currentYearMonth = $('.year-month span.title').html();

@@ -137,7 +137,7 @@
                 $('.content').scrollTop(0); // 每次翻页都滚动到顶部
                 setDayFrontStatus();
                 renderDayFront();
-                renderData(true);
+//                renderData(true); // TODO 加上这行，切换卡，不加这行，快速滑动，页面数据不准确
             }
         },
         onSlideChangeEnd: function (swiper) {
@@ -147,7 +147,7 @@
             }
             timeout = setTimeout(function () {
                 renderData();
-            }, 10);
+            }, 100);
         },
         onSliderMove: function (swiper, event) {
             dayFrontWrapTransform(swiper, false);
@@ -197,6 +197,10 @@
         }
     });
     $('.query .search-btn').click(function () {
+        renderData();
+    });
+
+    $('.query .company').change(function(){
         renderData();
     });
 

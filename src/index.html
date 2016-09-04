@@ -136,7 +136,7 @@
                 $('.content').scrollTop(0); // 每次翻页都滚动到顶部
                 setDayFrontStatus();
                 renderDayFront();
-//                renderData(true); // TODO 加上这行，切换卡，不加这行，快速滑动，页面数据不准确
+                // renderData(true); // FIXME 加上这行，切换卡，不加这行，快速滑动，页面数据不准确
             }
         },
         onSlideChangeEnd: function (swiper) {
@@ -146,7 +146,7 @@
             }
             timeout = setTimeout(function () {
                 renderData();
-            }, 100);
+            }, 0);
         },
         onSliderMove: function (swiper, event) {
             dayFrontWrapTransform(swiper, false);
@@ -199,7 +199,7 @@
         renderData();
     });
 
-    $('.query .company').change(function(){
+    $('.query .company').change(function () {
         renderData();
     });
 
@@ -271,10 +271,8 @@
     var noData = '<div class="loading-data">'
             + '<span class="spin">暂无数据</span>'
             + '</div>';
-    var noDataSymbol = 'noData';
 
     function renderActiveData(data, params) {
-
         var currentStartDate = $('.day-front-wrap .swiper-slide-active li:eq(0)').data('date');
         if (currentStartDate.Format('yyyy-MM-dd') !== params.startDate) {
             return;
@@ -282,16 +280,18 @@
         var $actives = getSwiperSlides()[1];
         $actives.each(function (i, active) {
             var $active = $(active);
-            if (!data || !data.result) {
+            if (!data || !data.result || !data.result.length) {
                 $active.html(loading);
                 renderName();
-            } else if (data === noDataSymbol) { // TODO 无数据判断
+            }
+            if (data && data.result && data.result.length === 0) {
                 $active.html(noData);
                 renderName();
-            } else if (data.result) {
-                renderDataSwiperSlide($active, data);
             }
-            renderName(data && data.result);
+            if (data && data.result && data.result.length) {
+                renderDataSwiperSlide($active, data);
+                renderName(data.result);
+            }
         });
     }
 
@@ -305,9 +305,11 @@
             var $prev = $(prev);
             if (!data || !data.result) {
                 $prev.html(loading);
-            } else if (data === noDataSymbol) { // TODO 无数据判断
+            }
+            if (data && data.result && data.result.length === 0) {
                 $prev.html(noData);
-            } else if (data.result) {
+            }
+            if (data && data.result && data.result.length) {
                 renderDataSwiperSlide($prev, data);
             }
         });
@@ -324,9 +326,11 @@
             var $next = $(prev);
             if (!data || !data.result) {
                 $next.html(loading);
-            } else if (data === noDataSymbol) { // TODO 无数据判断
+            }
+            if (data && data.result && data.result.length === 0) {
                 $next.html(noData);
-            } else if (data.result) {
+            }
+            if (data && data.result && data.result.length) {
                 renderDataSwiperSlide($next, data);
             }
         });
@@ -352,8 +356,12 @@
 
         return [$prevs, $actives, $nexts];
     }
+
+    /*
+     * 渲染数据
+     * */
     function renderDataSwiperSlide($ele, data) {
-        // TODO 根据数据结构，构造html
+        // TODO 如果数据结构变动根据数据结构，构造html
         var items = {
             '0': {
                 className: '',
@@ -364,12 +372,20 @@
                 text: '出差'
             },
             '2': {
-                className: 'green',
+                className: 'green-blue',
                 text: '事假'
             },
             '3': {
-                className: 'yellow',
+                className: 'orange',
                 text: '年假'
+            },
+            '4': {
+                className: 'yellow',
+                text: '婚假'
+            },
+            '5': {
+                className: 'green',
+                text: '其他'
             },
         }
         var nextCursor = data.nextCursor;
@@ -380,7 +396,8 @@
             var lis = [];
             for (var j = 0; j < d.length; j++) {
                 var dd = d[j];
-                var item = items[dd || '0'];
+                var item = items[dd || '0'] || {};
+
                 lis.push('<li><div class="item ' + item.className + '">' + item.text + '</div></li>');
             }
 
@@ -395,8 +412,12 @@
             $ele.append('<div class="loading">没有更多了</div>');
         }
     }
-
+    /**
+     * 渲染左侧name
+     * @param data
+     */
     function renderName(data) {
+        // TODO 如果数据结构变动根据数据结构，构造html
         if (data && data.length) {
             var lis = [];
             for (var i = 0; i < data.length; i++) {
@@ -427,148 +448,33 @@
 
     function getDataFromServer(params, callBack) {
         // TODO 发送ajax，返回的数据结构 renderDataSwiperSlide 方法中会用到。
-        setTimeout(function () {
-            var data = {
-                nextCursor: 1, // 滚动加载，是否有下一页的标记, 0 表示没有下一页了。
-                result: [
-                    {
-                        name: '张三' + params.company,
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    }, {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
-                    {
-                        name: '张三',
-                        data: [0, 1, 2, 3, 0, 0, 1]
-                    },
-                    {
-                        name: '李四',
-                        data: [0, 0, 1, 0, 2, 0, 3]
-                    },
-                    {
-                        name: '王五',
-                        data: [0, 3, 1, 0, 0, 1, 0]
-                    },
+        // params中无nextCursor，后端查询第一页，有nextCursor，基于nexCursor查询
+        console.log(params);
 
-
-                ]
-            };
-            callBack(data);
-        }, 1000);
-
+        $.ajax({
+            url: '/data.json',
+            data: params,
+            success: function (data) {
+                // 无数据时，返回： {nextCursor: 0, result: []}
+                // 正常返回数据：
+                /*
+                * {
+                     nextCursor: 1, // 滚动加载，是否有下一页的标记以及后端查询下一页的开始条件, 0 表示没有下一页了。
+                     result: [
+                         {
+                             name: '张三' + params.company,
+                             data: [0, 1, 2, 3, 4, 5, 1]
+                         },
+                         {
+                             name: '李四',
+                             data: [0, 0, 1, 0, 2, 0, 3]
+                         },
+                     ]
+                 }
+                * */
+                callBack(data);
+            }
+        });
     }
 
     // 获取 数据，cache中不存在，则从服务器获取。

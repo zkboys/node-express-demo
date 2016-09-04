@@ -308,12 +308,22 @@ select::-ms-expand {
 }
 
 .green {
+    background-color: #168024;
+}
+
+.green-blue {
     background-color: #50B6A9;
 }
 
-.yellow {
+.orange {
     background-color: #EE863E;
 }
+
+.yellow {
+    background-color: #e2db0f;
+}
+
+
 
 .content .loading {
     margin-left: -1.5rem;

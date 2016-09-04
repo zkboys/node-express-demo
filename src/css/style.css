@@ -14,6 +14,30 @@ body {
     box-sizing: border-box;
 }
 
+select {
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: solid 1px #858585;
+
+    /*很关键：将默认的select选择框样式清除*/
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+
+    /*在选择框的最右侧中间显示小箭头图片*/
+    background: url("../img/arrow16.png") no-repeat scroll right center transparent;
+    background-size: 8px 8px;
+    background-position-x: 97%;
+
+    /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+    padding-right: 14px;
+    padding-left: 5px;
+}
+
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+select::-ms-expand {
+    display: none;
+}
+
 .main-container {
     position: absolute;
     top: 0;
@@ -45,7 +69,6 @@ body {
     border-radius: 0;
     height: 1.5rem;
     line-height: 1.5rem;
-    background: #fff;
 }
 
 .query .company option {
@@ -147,7 +170,7 @@ body {
 
 .week-day .left .top-blank .day-prev {
     position: absolute;
-    right: 0;
+    right: -1px;
     top: 2.2rem;
     height: 1.6rem;
     line-height: 1.6rem;
@@ -205,6 +228,11 @@ body {
     height: 1.6rem;
     line-height: 1.6rem;
     font-size: 0.6rem;
+    border: 0;
+}
+
+.week-day .center .day-front li {
+    border: 0;
 }
 
 .week-day .center .day-front li.not-current {

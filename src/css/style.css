@@ -47,10 +47,9 @@ select::-ms-expand {
 }
 
 .query {
-    height: 4rem;
-    padding: 1.15rem 0.5rem 0 0.5rem;
+    height: 3rem;
+    padding: 0.73rem 0.5rem 0 0.5rem;
     background: #fff;
-
 }
 
 .query .label {
@@ -93,8 +92,8 @@ select::-ms-expand {
     background: #FBF7EB;
     text-align: center;
     font-size: 0.8rem;
-    height: 3rem;
-    line-height: 3rem;
+    height: 2.5rem;
+    line-height: 2.5rem;
     border-bottom: 1px solid #F1E2D0;
     color: #C3601F;
 }
@@ -241,7 +240,7 @@ select::-ms-expand {
 
 .content {
     position: absolute;
-    top: 11rem;
+    top: 9.5rem;
     right: 0;
     bottom: 0;
     left: 0;

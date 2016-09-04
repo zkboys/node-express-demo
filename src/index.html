@@ -23,7 +23,7 @@
     </div>
     <div class="year-month">
         <div class="year-month-prev">&lt;</div>
-        <span>2016年2月</span>
+        <span class="title"></span>
         <div class="year-month-next">&gt;</div>
     </div>
     <div class="week-day">
@@ -53,52 +53,6 @@
                     <li>&nbsp;</li>
                 </ul>
                 <div class="day-front-wrap">
-                    <ul class="day-front" data-swiper-slide-index="2">
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>01</li>
-                    </ul>
-                    <ul class="day-front" data-swiper-slide-index="0">
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                    </ul>
-                    <ul class="day-front" data-swiper-slide-index="1">
-                        <li>02</li>
-                        <li>02</li>
-                        <li>02</li>
-                        <li>02</li>
-                        <li>02</li>
-                        <li>02</li>
-                        <li>02</li>
-                    </ul>
-                    <ul class="day-front" data-swiper-slide-index="2">
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                        <li>03</li>
-                    </ul>
-                    <ul class="day-front" data-swiper-slide-index="0">
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                        <li>01</li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -434,50 +388,119 @@
 </script>
 <!-- Initialize Swiper -->
 <script>
+
+    // 对Date的扩展，将 Date 转化为指定格式的String
+    // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+    // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+    // 例子：
+    // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+    // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    initDateFontHtml()
+
     var timeout = 0;
+    var inited = false;
     var mySwiper = new Swiper('.swiper-container', {
         loop: true,
         autoHeight: true,
         nextButton: '.day-next',
         prevButton: '.day-prev',
-        onSlideChangeEnd: function (swiper) {
-            dayFrontWrapTransform(swiper, false);
+        onInit: function (swiper) {
+            setDayFrontStatus();
+            renderDayFront(true);
+            inited = true;
         },
         onSlideNextStart: function (swiper) {
             console.log('nextStart');
-        },
-        onSlideNextEnd: function (swiper) {
-            if (timeout) {
-                clearTimeout(timeout);
+            if (inited) {
+                setDayFrontStatus();
+                renderDayFront();
             }
-            timeout = setTimeout(function () {
-                console.log('nextEnd', swiper.translate);
-            }, 100);
         },
         onSlidePrevStart: function (swiper) {
             console.log('prevStart');
-        },
-        onSlidePrevEnd: function (swiper) {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(function () {
-                console.log('prevEnd');
-            }, 100);
+            setDayFrontStatus();
+            renderDayFront();
         },
         onSliderMove: function (swiper, event) {
             dayFrontWrapTransform(swiper, false);
         },
         onTouchEnd: function (swiper) {
             setTimeout(function () {
-                console.log(swiper.translate);
                 dayFrontWrapTransform(swiper, true);
             }, 0);
         },
+        onSlideChangeEnd: function (swiper) {
+            dayFrontWrapTransform(swiper, false);
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(function () {
+                renderData();
+            }, 100);
+
+        },
     });
+
     $('.day-next, .day-prev').click(function () {
         dayFrontWrapTransform(mySwiper, true);
     });
+
+    function renderData() {
+        var $activeLi = $('.day-front-wrap .swiper-slide-active li');
+        var company = $('.query .company').val();
+        var startDate = $($activeLi[0]).data('date');
+        var endDate = $($activeLi[6]).data('date');
+        var params = {
+            company: company,
+            startDate: startDate.Format('yyyy-MM-dd'),
+            endDate: endDate.Format('yyyy-MM-dd')
+        };
+
+        getData(params, function (data) {
+            console.log(params);
+            console.log(data);
+        });
+    }
+
+    function getData(options, callback) {
+        callback({
+            prev: 'prev date',
+            active: 'active date',
+            next: 'next date'
+        });
+    }
+
+    function initDateFontHtml() {
+        for (var i = 0; i < 5; i++) {
+            $('.day-front-wrap').append(
+                    '<ul class="day-front">'
+                    + '<li>&nbsp;</li>'
+                    + '<li>&nbsp;</li>'
+                    + '<li>&nbsp;</li>'
+                    + '<li>&nbsp;</li>'
+                    + '<li>&nbsp;</li>'
+                    + '<li>&nbsp;</li>'
+                    + '<li>&nbsp;</li>'
+                    + '</ul>');
+        }
+    }
+
     function dayFrontWrapTransform(swiper, addNoTouchClass) {
         var $dayFrontWrap = $('.day-front-wrap');
         if (addNoTouchClass) {
@@ -488,6 +511,152 @@
         $dayFrontWrap.css({
             transform: 'translate3d(' + swiper.translate + 'px, 0, 0)'
         });
+    }
+
+    function setDayFrontStatus() {
+        $('.swiper-container .swiper-slide').each(function (index, value) {
+            value = $(value);
+            $('.day-front-wrap > ul:eq(' + index + ')')
+                    .attr('class', 'day-front ' + value.attr('class'))
+                    .attr('data-swiper-slide-index', value.attr('data-swiper-slide-index'));
+
+        });
+    }
+    function renderYearMonth() {
+        var result1 = {
+            count: 0,
+        };
+        var result2 = {
+            count: 0,
+        };
+        var $activeLi = $('.day-front-wrap .swiper-slide-active li');
+        $activeLi.each(function (index, li) {
+            var $li = $(li);
+            var date = $li.data('date');
+            var dateStr = date.Format('yyyy年MM月');
+            if (!result1.dateStr) {
+                result1.dateStr = dateStr;
+            }
+
+            if (!result2.dateStr && result1.dateStr !== dateStr) {
+                result2.dateStr = dateStr;
+            }
+
+            if (result1.dateStr && result1.dateStr === dateStr) {
+                result1.count += 1;
+            }
+
+            if (result2.dateStr && result2.dateStr === dateStr) {
+                result2.count += 1;
+            }
+        });
+        var dateStr = result2.dateStr;
+        if (result1.count > result2.count) {
+            dateStr = result1.dateStr;
+        }
+        $('.year-month span.title').html(dateStr);
+    }
+
+    function renderDayFront(init) {
+        var intiDate = new Date('2016-2-3');
+        var $active = $('.day-front-wrap .swiper-slide-active');
+        if (!init) {
+            intiDate = $active.find('li').data('date');
+        }
+        var dates = getWeekDateRange(intiDate);
+        var prevDates = dates.prevDates;
+        var activeDates = dates.activeDates;
+        var nextDates = dates.nextDates;
+
+        var activeIndex = parseInt($active.attr('data-swiper-slide-index'));
+
+        var prevIndex = activeIndex - 1;
+        var nextIndex = activeIndex + 1;
+        var totalCount = 3;
+        if (prevIndex < 0) {
+            prevIndex = totalCount + prevIndex
+        }
+
+        if (nextIndex > totalCount - 1) {
+            nextIndex = nextIndex - totalCount;
+        }
+
+        var $actives = $('.day-front-wrap [data-swiper-slide-index=' + activeIndex + ']');
+        var $prevs = $('.day-front-wrap [data-swiper-slide-index=' + prevIndex + ']');
+        var $nexts = $('.day-front-wrap [data-swiper-slide-index=' + nextIndex + ']');
+
+        $actives.each(function (i, active) {
+            $(active).find('li').each(function (index, li) {
+                var $li = $(li);
+                var date = activeDates[index];
+                $li.data('date', date);
+                $li.html(date.Format('dd'));
+            })
+        });
+
+        $prevs.each(function (i, prev) {
+            $(prev).find('li').each(function (index, li) {
+                var $li = $(li);
+                var date = prevDates[index];
+                $li.data('date', date);
+                $li.html(date.Format('dd'));
+            });
+        });
+
+        $nexts.each(function (i, next) {
+            $(next).find('li').each(function (index, li) {
+                var $li = $(li);
+                var date = nextDates[index];
+                $li.data('date', date);
+                $li.html(date.Format('dd'));
+            });
+        });
+        renderYearMonth();
+
+        // 处理样式
+        var currentYearMonth = $('.year-month span.title').html();
+        $actives.each(function (i, active) {
+            $(active).find('li').each(function (index, li) {
+                var $li = $(li);
+                var date = $li.data('date');
+                var $liYearMonth = date.Format('yyyy年MM月');
+                if (currentYearMonth !== $liYearMonth) {
+                    $li.addClass('not-current');
+                } else {
+                    $li.removeClass('not-current');
+                }
+            })
+        });
+
+
+    }
+
+    function getWeekDateRange(date) {
+        var activeDates = [];
+        var prevDates = [];
+        var nextDates = [];
+        var nowTime = date.getTime();
+        var day = date.getDay();
+        var oneDayLong = 24 * 60 * 60 * 1000;
+
+        for (var i = -7; i < 14; i++) {
+            var dateTiem = nowTime + (i - day) * oneDayLong;
+            var d = new Date(dateTiem);
+            if (i < 0) {
+                prevDates.push(d);
+            } else if (i < 7) {
+                activeDates.push(d);
+            } else {
+                nextDates.push(d);
+            }
+
+        }
+
+        return {
+            activeDates: activeDates,
+            prevDates: prevDates,
+            nextDates: nextDates,
+        }
     }
 </script>
 </body>

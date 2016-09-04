@@ -207,6 +207,10 @@ body {
     font-size: 0.6rem;
 }
 
+.week-day .center .day-front li.not-current {
+    color: #aaa;
+}
+
 .content {
     position: absolute;
     top: 11rem;

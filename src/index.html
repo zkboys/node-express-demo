@@ -22,7 +22,8 @@
     </div>
     <div class="year-month">
         <div class="year-month-prev">&lt;</div>
-        <span class="title"></span>
+        <select name="year-month" id="year-month-select">
+        </select>
         <div class="year-month-next">&gt;</div>
     </div>
     <div class="week-day">
@@ -116,6 +117,14 @@
 
     initDateFontHtml();
 
+    // 初始化年月select数据
+    for (var i = 2010; i <= new Date().getFullYear(); i++) {
+        for (var j = 1; j <= 12; j++) {
+            var month = j < 10 ? '0' + j : j;
+            var value = i + '年' + month + '月';
+            $('#year-month-select').append('<option value="' + value + '">' + value + '</option>');
+        }
+    }
     var timeout = 0;
     var inited = false;
     var mySwiper = new Swiper('.swiper-container', {
@@ -175,9 +184,18 @@
             renderDataByNextCursor();
         }
     });
-
+    $('#year-month-select').change(function () {
+        $('.content').scrollTop(0); // 每次翻页都滚动到顶部
+        var currentYearMonthStr = $('#year-month-select').val();
+        var year = currentYearMonthStr.split('年')[0];
+        var month = currentYearMonthStr.split('年')[1].split('月')[0];
+        var currentYearMonth = new Date(year, month-1, 1);
+        console.log(currentYearMonth.Format('yyyy-MM-dd'));
+        renderDayFront(currentYearMonth);
+        renderData();
+    });
     $('.year-month-prev, .year-month-next').click(function () {
-        var currentYearMonthStr = $('.year-month .title').html();
+        var currentYearMonthStr = $('#year-month-select').val();
         var year = currentYearMonthStr.split('年')[0];
         var month = currentYearMonthStr.split('年')[1].split('月')[0];
         var currentYearMonth = new Date(year, month - 1);
@@ -194,6 +212,15 @@
             renderDayFront(prevYearMonth);
             renderData();
         }
+
+        if ($(this).hasClass('year-month-next')) {
+            var nextYearMonthStr = nextYearMonth.Format('yyyy年MM月')
+            setYearMonthSelectValue(nextYearMonthStr);
+
+        } else {
+            var prevYearMonthStr = prevYearMonth.Format('yyyy年MM月')
+            setYearMonthSelectValue(prevYearMonthStr);
+        }
     });
     $('.query .search-btn').click(function () {
         renderData();
@@ -203,6 +230,18 @@
         renderData();
     });
 
+    function setYearMonthSelectValue(dateStr) {
+        if (!$('#year-month-select option[value=' + dateStr + ']').length) {
+            var nowStr = new Date().Format('yyyy年MM月');
+            var newOption = '<option value="' + dateStr + '">' + dateStr + '</option>';
+            if (dateStr > nowStr) {
+                $('#year-month-select').append(newOption);
+            } else {
+                $('#year-month-select').prepend(newOption);
+            }
+        }
+        $('#year-month-select').val(dateStr);
+    }
     function renderDataByNextCursor() {
         var $isLoading = $('.swiper-container .swiper-slide-active .is-loading');
         if (!$isLoading.length) {
@@ -459,20 +498,20 @@
                 // 无数据时，返回： {nextCursor: 0, result: []}
                 // 正常返回数据：
                 /*
-                * {
-                     nextCursor: 1, // 滚动加载，是否有下一页的标记以及后端查询下一页的开始条件, 0 表示没有下一页了。
-                     result: [
-                         {
-                             name: '张三' + params.company,
-                             data: [0, 1, 2, 3, 4, 5, 1]
-                         },
-                         {
-                             name: '李四',
-                             data: [0, 0, 1, 0, 2, 0, 3]
-                         },
-                     ]
+                 * {
+                 nextCursor: 1, // 滚动加载，是否有下一页的标记以及后端查询下一页的开始条件, 0 表示没有下一页了。
+                 result: [
+                 {
+                 name: '张三' + params.company,
+                 data: [0, 1, 2, 3, 4, 5, 1]
+                 },
+                 {
+                 name: '李四',
+                 data: [0, 0, 1, 0, 2, 0, 3]
+                 },
+                 ]
                  }
-                * */
+                 * */
                 callBack(data);
             }
         });
@@ -589,7 +628,7 @@
     function renderYearMonth(initData) {
         if (initData) {
             var dateStr = initData.Format('yyyy年MM月');
-            $('.year-month span.title').html(dateStr);
+            setYearMonthSelectValue(dateStr);
             return;
         }
         var result1 = {
@@ -623,7 +662,7 @@
         if (result1.count > result2.count) {
             dateStr = result1.dateStr;
         }
-        $('.year-month span.title').html(dateStr);
+        setYearMonthSelectValue(dateStr);
     }
 
     function renderDayFront(init) {
@@ -684,7 +723,7 @@
         renderYearMonth(initYearMonth);
 
         // 处理样式
-        var currentYearMonth = $('.year-month span.title').html();
+        var currentYearMonth = $('#year-month-select').val();
         $actives.each(function (i, active) {
             $(active).find('li').each(function (index, li) {
                 var $li = $(li);

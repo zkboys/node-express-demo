@@ -237,6 +237,17 @@ body {
     position: relative;
 }
 
+.content .center .loading-data {
+    height: 15rem;
+    margin-left: -1.5rem;
+    padding-top: 2rem;
+    text-align: center;
+}
+
+.content .center .loading-data .spin{
+
+}
+
 .content .center .data,
 .content .center .data > li ul {
     list-style-type: none;

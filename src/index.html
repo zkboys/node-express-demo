@@ -11,20 +11,33 @@
 <body>
 <div class="main-container">
     <div class="query">
-        <div class="label">公司</div>
-        <select class="company">
-            <option value="beijing">北京总公司</option>
-            <option value="shanghai">上海分公司</option>
-            <option value="shenzhen">深圳分公司</option>
-            <option value="guangzhou">广州分公司</option>
-        </select>
-        <!--select onChange 就查询了，这个按钮先隐藏掉，如果有人员输入框，输入框onchange触发查询，也不用加查询按钮-->
-        <div class="search-btn " style="display:none">查询</div>
+        <div>
+            <div class="label">公司</div>
+            <select class="company">
+                <option value="beijing">北京总公司</option>
+                <option value="shanghai">上海分公司</option>
+                <option value="shenzhen">深圳分公司</option>
+                <option value="guangzhou">广州分公司</option>
+            </select>
+        </div>
+        <div>
+            <div class="label">人员级别</div>
+            <select class="person-level">
+                <option value="all">全部</option>
+                <option value="1">级别1</option>
+                <option value="2">级别2</option>
+                <option value="3">级别3</option>
+            </select>
+        </div>
+        <div>
+            <div class="label">姓名</div>
+            <input class="person-name" type="text" name="name">
+            <div class="search-btn ">查询</div>
+        </div>
     </div>
     <div class="year-month">
         <div class="year-month-prev">&lt;</div>
-        <select name="year-month" id="year-month-select">
-        </select>
+        <input name="year-month" id="year-month-select" type="month">
         <div class="year-month-next">&gt;</div>
     </div>
     <div class="week-day">
@@ -118,14 +131,6 @@
 
     initDateFontHtml();
 
-    // 初始化年月select数据
-    for (var i = 2010; i <= new Date().getFullYear(); i++) {
-        for (var j = 1; j <= 12; j++) {
-            var month = j < 10 ? '0' + j : j;
-            var value = i + '年' + month + '月';
-            $('#year-month-select').append('<option value="' + value + '">' + value + '</option>');
-        }
-    }
     var timeout = 0;
     var inited = false;
     var mySwiper = new Swiper('.swiper-container', {
@@ -187,19 +192,21 @@
     });
     $('#year-month-select').change(function () {
         $('.content').scrollTop(0); // 每次翻页都滚动到顶部
-        var currentYearMonthStr = $('#year-month-select').val();
-        var year = currentYearMonthStr.split('年')[0];
-        var month = currentYearMonthStr.split('年')[1].split('月')[0];
-        var currentYearMonth = new Date(year, month-1, 1);
+        var currentYearMonth = $('#year-month-select').val();
+//        var year = currentYearMonthStr.split('年')[0];
+//        var month = currentYearMonthStr.split('年')[1].split('月')[0];
+//        var currentYearMonth = new Date(year, month-1, 1);
+        currentYearMonth = new Date(currentYearMonth);
         console.log(currentYearMonth.Format('yyyy-MM-dd'));
         renderDayFront(currentYearMonth);
         renderData();
     });
     $('.year-month-prev, .year-month-next').click(function () {
-        var currentYearMonthStr = $('#year-month-select').val();
-        var year = currentYearMonthStr.split('年')[0];
-        var month = currentYearMonthStr.split('年')[1].split('月')[0];
-        var currentYearMonth = new Date(year, month - 1);
+        var currentYearMonth = $('#year-month-select').val();
+        currentYearMonth = new Date(currentYearMonth);
+//        var year = currentYearMonthStr.split('年')[0];
+//        var month = currentYearMonthStr.split('年')[1].split('月')[0];
+//        var currentYearMonth = new Date(year, month - 1);
         var prevYearMonth = new Date(currentYearMonth.getFullYear(), currentYearMonth.getMonth() - 1, 1);
         var nextYearMonth = new Date(currentYearMonth.getFullYear(), currentYearMonth.getMonth() + 1, 1);
 
@@ -215,12 +222,10 @@
         }
 
         if ($(this).hasClass('year-month-next')) {
-            var nextYearMonthStr = nextYearMonth.Format('yyyy年MM月')
-            setYearMonthSelectValue(nextYearMonthStr);
+            setYearMonthSelectValue(nextYearMonth);
 
         } else {
-            var prevYearMonthStr = prevYearMonth.Format('yyyy年MM月')
-            setYearMonthSelectValue(prevYearMonthStr);
+            setYearMonthSelectValue(prevYearMonth);
         }
     });
     $('.query .search-btn').click(function () {
@@ -231,16 +236,8 @@
         renderData();
     });
 
-    function setYearMonthSelectValue(dateStr) {
-        if (!$('#year-month-select option[value=' + dateStr + ']').length) {
-            var nowStr = new Date().Format('yyyy年MM月');
-            var newOption = '<option value="' + dateStr + '">' + dateStr + '</option>';
-            if (dateStr > nowStr) {
-                $('#year-month-select').append(newOption);
-            } else {
-                $('#year-month-select').prepend(newOption);
-            }
-        }
+    function setYearMonthSelectValue(date) {
+        var dateStr = date.Format('yyyy-MM');
         $('#year-month-select').val(dateStr);
     }
     function renderDataByNextCursor() {
@@ -273,10 +270,14 @@
     function getCurrentParams() {
         var $activeLi = $('.day-front-wrap .swiper-slide-active li');
         var company = $('.query .company').val();
+        var level = $('.query .person-level').val();
+        var name = $('.query .person-name').val();
         var startDate = $($activeLi[0]).data('date');
         var endDate = $($activeLi[6]).data('date');
         return {
             company: company,
+            level: level,
+            name: name,
             startDate: startDate.Format('yyyy-MM-dd'),
             endDate: endDate.Format('yyyy-MM-dd'),
         };
@@ -628,8 +629,7 @@
     }
     function renderYearMonth(initData) {
         if (initData) {
-            var dateStr = initData.Format('yyyy年MM月');
-            setYearMonthSelectValue(dateStr);
+            setYearMonthSelectValue(initData);
             return;
         }
         var result1 = {
@@ -645,10 +645,12 @@
             var dateStr = date.Format('yyyy年MM月');
             if (!result1.dateStr) {
                 result1.dateStr = dateStr;
+                result1.date = date;
             }
 
             if (!result2.dateStr && result1.dateStr !== dateStr) {
                 result2.dateStr = dateStr;
+                result2.date = date;
             }
 
             if (result1.dateStr && result1.dateStr === dateStr) {
@@ -659,11 +661,11 @@
                 result2.count += 1;
             }
         });
-        var dateStr = result2.dateStr;
+        var date = result2.date;
         if (result1.count > result2.count) {
-            dateStr = result1.dateStr;
+            date = result1.date;
         }
-        setYearMonthSelectValue(dateStr);
+        setYearMonthSelectValue(date);
     }
 
     function renderDayFront(init) {
@@ -729,8 +731,8 @@
             $(active).find('li').each(function (index, li) {
                 var $li = $(li);
                 var date = $li.data('date');
-                var $liYearMonth = date.Format('yyyy年MM月');
-                if (currentYearMonth !== $liYearMonth) {
+                var $liYearMonthStr = date.Format('yyyy-MM');
+                if (currentYearMonth !== $liYearMonthStr) {
                     $li.addClass('not-current');
                 } else {
                     $li.removeClass('not-current');

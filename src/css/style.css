@@ -1,16 +1,19 @@
 html {
     font-size: 20px;
 }
+
 @media only screen and (min-width: 400px) {
     html {
         font-size: 21.33333333px !important;
     }
 }
+
 @media only screen and (min-width: 414px) {
     html {
         font-size: 22.08px !important;
     }
 }
+
 @media only screen and (min-width: 480px) {
     html {
         font-size: 25.6px !important;
@@ -29,6 +32,7 @@ body {
     box-sizing: border-box;
 }
 
+input[type=month],
 select {
     /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
     border: solid 1px #858585;
@@ -62,20 +66,29 @@ select::-ms-expand {
 }
 
 .query {
-    height: 3rem;
+    height: 7rem;
     padding: 0.73rem 0.5rem 0 0.5rem;
     background: #fff;
+}
+
+.query > div {
+    overflow: hidden;
+    margin-bottom: 0.5rem;
 }
 
 .query .label {
     float: left;
     height: 30px;
+    width: 3.2rem;
+    text-align: right;
     line-height: 30px;
     color: #000;
     font-size: 0.8rem;
     margin-right: 0.5rem;
 }
 
+.query .person-level,
+.query .person-name,
 .query .company {
     float: left;
     width: 8rem;
@@ -86,6 +99,7 @@ select::-ms-expand {
     font-size: 0.7rem;
 }
 
+.query .person-level option,
 .query .company option {
     width: 8rem;
 }
@@ -113,14 +127,16 @@ select::-ms-expand {
     border-bottom: 1px solid #F1E2D0;
     color: #C3601F;
 }
-.year-month select{
+
+.year-month input {
     border: 0;
     background: transparent;
     color: #C3601F;
     font-size: 0.8rem;
 }
-.year-month select:focus,
-.year-month select:active{
+
+.year-month input:focus,
+.year-month input:active {
     border: 0;
     outline: 0;
 }
@@ -267,7 +283,7 @@ select::-ms-expand {
 
 .content {
     position: absolute;
-    top: 9.5rem;
+    top: 13.5rem;
     right: 0;
     bottom: 0;
     left: 0;
@@ -349,8 +365,6 @@ select::-ms-expand {
 .yellow {
     background-color: #e2db0f;
 }
-
-
 
 .content .loading {
     margin-left: -1.5rem;

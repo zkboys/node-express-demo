@@ -101,7 +101,6 @@
         </div>
     </div>
 </div>
-
 <!-- Swiper JS -->
 <script src="./js/swiper.min.js"></script>
 <script type="text/javascript" src="js/jquery.js"></script>
@@ -192,7 +191,7 @@
     });
     $('#year-month-select').change(function () {
         $('.content').scrollTop(0); // 每次翻页都滚动到顶部
-        var currentYearMonth = $('#year-month-select').val();
+        var currentYearMonth = getYearMonthSelectValue();
 //        var year = currentYearMonthStr.split('年')[0];
 //        var month = currentYearMonthStr.split('年')[1].split('月')[0];
 //        var currentYearMonth = new Date(year, month-1, 1);
@@ -202,7 +201,7 @@
         renderData();
     });
     $('.year-month-prev, .year-month-next').click(function () {
-        var currentYearMonth = $('#year-month-select').val();
+        var currentYearMonth = getYearMonthSelectValue();
         currentYearMonth = new Date(currentYearMonth);
 //        var year = currentYearMonthStr.split('年')[0];
 //        var month = currentYearMonthStr.split('年')[1].split('月')[0];
@@ -239,6 +238,9 @@
     function setYearMonthSelectValue(date) {
         var dateStr = date.Format('yyyy-MM');
         $('#year-month-select').val(dateStr);
+    }
+    function getYearMonthSelectValue() {
+        return $('#year-month-select').val();
     }
     function renderDataByNextCursor() {
         var $isLoading = $('.swiper-container .swiper-slide-active .is-loading');
@@ -726,7 +728,7 @@
         renderYearMonth(initYearMonth);
 
         // 处理样式
-        var currentYearMonth = $('#year-month-select').val();
+        var currentYearMonth = getYearMonthSelectValue();
         $actives.each(function (i, active) {
             $(active).find('li').each(function (index, li) {
                 var $li = $(li);

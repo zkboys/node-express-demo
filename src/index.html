@@ -37,7 +37,9 @@
     </div>
     <div class="year-month">
         <div class="year-month-prev">&lt;</div>
-        <input name="year-month" id="year-month-select" type="month">
+        <select name="year" id="year-select"></select>
+        <select name="month" id="month-select"></select>
+        <!--<input name="year-month" id="year-month-select" type="month">-->
         <div class="year-month-next">&gt;</div>
     </div>
     <div class="week-day">
@@ -130,6 +132,18 @@
 
     initDateFontHtml();
 
+    // 初始化年select数据
+    for (var i = 1900; i <= new Date().getFullYear() + 10; i++) {
+        var year = i + '年';
+        $('#year-select').append('<option value="' + i + '">' + year + '</option>');
+    }
+    // 初始化月select数据
+    for (var i = 1; i <= 12; i++) {
+        var month = i < 10 ? '0' + i : i;
+        var monthStr = month + '月';
+        $('#month-select').append('<option value="' + month + '">' + monthStr + '</option>');
+    }
+
     var timeout = 0;
     var inited = false;
     var mySwiper = new Swiper('.swiper-container', {
@@ -189,12 +203,9 @@
             renderDataByNextCursor();
         }
     });
-    $('#year-month-select').change(function () {
+    $('#year-select, #month-select').change(function () {
         $('.content').scrollTop(0); // 每次翻页都滚动到顶部
         var currentYearMonth = getYearMonthSelectValue();
-//        var year = currentYearMonthStr.split('年')[0];
-//        var month = currentYearMonthStr.split('年')[1].split('月')[0];
-//        var currentYearMonth = new Date(year, month-1, 1);
         currentYearMonth = new Date(currentYearMonth);
         console.log(currentYearMonth.Format('yyyy-MM-dd'));
         renderDayFront(currentYearMonth);
@@ -203,9 +214,6 @@
     $('.year-month-prev, .year-month-next').click(function () {
         var currentYearMonth = getYearMonthSelectValue();
         currentYearMonth = new Date(currentYearMonth);
-//        var year = currentYearMonthStr.split('年')[0];
-//        var month = currentYearMonthStr.split('年')[1].split('月')[0];
-//        var currentYearMonth = new Date(year, month - 1);
         var prevYearMonth = new Date(currentYearMonth.getFullYear(), currentYearMonth.getMonth() - 1, 1);
         var nextYearMonth = new Date(currentYearMonth.getFullYear(), currentYearMonth.getMonth() + 1, 1);
 
@@ -235,12 +243,27 @@
         renderData();
     });
 
-    function setYearMonthSelectValue(date) {
-        var dateStr = date.Format('yyyy-MM');
-        $('#year-month-select').val(dateStr);
-    }
     function getYearMonthSelectValue() {
-        return $('#year-month-select').val();
+        var year = $('#year-select').val();
+        var month = $('#month-select').val();
+        return year + '-' + month;
+    }
+    function setYearMonthSelectValue(date) {
+        var year = date.Format('yyyy');
+        var month = date.Format('MM');
+
+        if (!$('#year-select option[value=' + year + ']').length) {
+            var nowYear = new Date().Format('yyyy');
+            var newOption = '<option value="' + year + '">' + year + '年</option>';
+            if (year > nowYear) {
+                $('#year-select').append(newOption);
+            } else {
+                $('#year-select').prepend(newOption);
+            }
+        }
+
+        $('#year-select').val(year);
+        $('#month-select').val(month);
     }
     function renderDataByNextCursor() {
         var $isLoading = $('.swiper-container .swiper-slide-active .is-loading');

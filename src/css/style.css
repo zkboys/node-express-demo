@@ -128,15 +128,15 @@ select::-ms-expand {
     color: #C3601F;
 }
 
-.year-month input {
+.year-month select {
     border: 0;
     background: transparent;
     color: #C3601F;
     font-size: 0.8rem;
 }
 
-.year-month input:focus,
-.year-month input:active {
+.year-month select:focus,
+.year-month select:active {
     border: 0;
     outline: 0;
 }
